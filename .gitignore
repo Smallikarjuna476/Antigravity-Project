@@ -1,0 +1,19 @@
+# Environments
+backend/venv/
+node_modules/
+.env
+
+# Cache
+__pycache__/
+*.pyc
+.pytest_cache/
+frontend/dist/
+
+# Databases
+*.db
+*.sqlite3
+agrisense.db
+
+# OS Files
+.DS_Store
+Thumbs.db

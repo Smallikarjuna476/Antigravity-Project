@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #020617;
+    --bg-secondary: #0f172a;
+    --bg-card: rgba(15, 23, 42, 0.75);
+    --border-color: rgba(51, 65, 85, 0.6);
+  }
+
+  .light {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --border-color: rgba(226, 232, 240, 0.8);
+  }
+}
+
+/* Glassmorphism Styles */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.light .glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.45);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.light .glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.glass-card:hover {
+  border-color: rgba(34, 197, 94, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(34, 197, 94, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 197, 94, 0.5);
+}
+
+/* Leaflet Map overrides for dark mode */
+.dark .leaflet-container {
+  background: #090d16 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+}
+
+.leaflet-popup-tip {
+  background: #0f172a !important;
+}
+
+/* Base Print Styles for PDF Generation */
+@media print {
+  /* Set exact color matching */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Reset layout constraints causing empty pages */
+  body, html, main, #root, .flex-1, .min-h-screen {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+
+  /* Hide UI elements not meant for PDF */
+  nav, aside, header, button, .exclude-print {
+    display: none !important;
+  }
+  
+  /* Reset padding meant for sidebars */
+  main {
+    padding-left: 0 !important;
+  }
+
+  /* Optimize card breakpoints for A4 paper */
+  .grid-cols-1, .sm\:grid-cols-2, .lg\:grid-cols-4, .lg\:grid-cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1rem !important;
+  }
+
+  /* Keep content inside pages */
+  .glass-card, .bg-white, .dark\:bg-slate-900, canvas, svg, img {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
