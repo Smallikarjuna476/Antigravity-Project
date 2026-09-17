@@ -12,11 +12,10 @@ import { DiseaseDetectionPage } from './pages/DiseaseDetectionPage';
 
 import { AssistantPage } from './pages/AssistantPage';
 import { WeatherPage } from './pages/WeatherPage';
-import { MarketPage } from './pages/MarketPage';
 import { CropPlannerPage } from './pages/CropPlannerPage';
 import { SoilIntelligencePage } from './pages/SoilIntelligencePage';
 import { SchemesPage } from './pages/SchemesPage';
-import { HealthTimelinePage } from './pages/HealthTimelinePage';
+
 import { FarmJournalPage } from './pages/FarmJournalPage';
 import { AnalyticsPage } from './pages/AnalyticsPage';
 import { KnowledgeHubPage } from './pages/KnowledgeHubPage';
@@ -44,11 +43,10 @@ export const App: React.FC = () => {
               <Route path="/disease" element={<DiseaseDetectionPage />} />
               <Route path="/assistant" element={<AssistantPage />} />
               <Route path="/weather" element={<WeatherPage />} />
-              <Route path="/market" element={<MarketPage />} />
               <Route path="/planner" element={<CropPlannerPage />} />
               <Route path="/soil" element={<SoilIntelligencePage />} />
               <Route path="/schemes" element={<SchemesPage />} />
-              <Route path="/timeline" element={<HealthTimelinePage />} />
+
               <Route path="/journal" element={<FarmJournalPage />} />
               <Route path="/analytics" element={<AnalyticsPage />} />
               <Route path="/knowledge" element={<KnowledgeHubPage />} />

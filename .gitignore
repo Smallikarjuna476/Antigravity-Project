@@ -17,3 +17,10 @@ agrisense.db
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Heavy ML Models and Datasets
+backend/dataset/
+backend/ml/models/
+backend/app/static/uploads/
+backend/app/static/heatmaps/
+backend/app/static/reports/

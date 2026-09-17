@@ -13,25 +13,6 @@ export const Footer: React.FC = () => {
           <span>Next-Generation Intelligent Agriculture Decision Support</span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-400">
-          <span className="flex items-center gap-1">
-            <Cpu className="w-3.5 h-3.5 text-emerald-400" />
-            100% Localhost AI
-          </span>
-          <span className="flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-            Zero External Paid API Dependency
-          </span>
-          <span className="flex items-center gap-1">
-            <Code2 className="w-3.5 h-3.5 text-purple-400" />
-            SIH & Major Project Edition
-          </span>
-        </div>
-
-        <div className="text-slate-500 text-[11px]">
-          © {new Date().getFullYear()} AgriSense AI. Enterprise Architecture.
-        </div>
-
       </div>
     </footer>
   );

@@ -167,6 +167,14 @@ export const marketApi = {
   }
 };
 
+// --- Module 4.5: Yield Simulator ---
+export const yieldSimApi = {
+  getSimulation: async (nitrogen: number, water: number, temp: number, pest: number): Promise<any> => {
+    const res = await api.get(`/yield/simulate?nitrogen=${nitrogen}&water=${water}&temp=${temp}&pest_stress=${pest}`);
+    return res.data;
+  }
+};
+
 // --- Module 5: Smart Crop Planner ---
 export const plannerApi = {
   getRecommendations: async (state: string, season: string): Promise<any> => {
@@ -203,17 +211,6 @@ export const schemesApi = {
   }
 };
 
-// --- Module 8: Crop Health Timeline ---
-export const timelineApi = {
-  getEvents: async (crop: string, startDate?: string): Promise<any> => {
-    let url = `/timeline/events?crop=${crop}`;
-    if (startDate) {
-      url += `&start_date=${startDate}`;
-    }
-    const res = await api.get(url);
-    return res.data;
-  }
-};
 
 // --- Module 9: Smart Farm Journal ---
 export const journalApi = {
@@ -227,6 +224,50 @@ export const journalApi = {
   },
   deleteEntry: async (id: string): Promise<any> => {
     const res = await api.delete(`/journal/entries/${id}`);
+    return res.data;
+  }
+};
+
+// --- Module 13: Community Forum ---
+export const forumApi = {
+  getPosts: async (category: string, search: string): Promise<any> => {
+    const res = await api.get(`/forum/posts?category=${category}&search=${search}`);
+    return res.data;
+  }
+};
+
+// --- Module 10: Analytics ---
+export const analyticsApi = {
+  getMetrics: async (timeframe: string): Promise<any> => {
+    const res = await api.get(`/analytics/metrics?timeframe=${timeframe}`);
+    return res.data;
+  }
+};
+
+// --- Module 1: XAI Samples ---
+export const xaiApi = {
+  getSamples: async (): Promise<any> => {
+    const res = await api.get('/xai/samples');
+    return res.data;
+  },
+  getFeatures: async (): Promise<any> => {
+    const res = await api.get('/xai/features');
+    return res.data;
+  }
+};
+
+// --- Module 12: Digital Twin ---
+export const twinApi = {
+  getStatus: async (): Promise<any> => {
+    const res = await api.get('/twin/status');
+    return res.data;
+  }
+};
+
+// --- Module 14: Knowledge Hub ---
+export const hubApi = {
+  getArticles: async (category: string, search: string): Promise<any> => {
+    const res = await api.get(`/hub/articles?category=${category}&search=${search}`);
     return res.data;
   }
 };

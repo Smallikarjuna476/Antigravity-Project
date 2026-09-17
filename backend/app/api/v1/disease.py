@@ -23,6 +23,23 @@ from app.services.pdf_generator import pdf_report_generator
 
 router = APIRouter(prefix="/disease", tags=["Module 1: AI Crop Disease Detection"])
 
+@router.get("/status")
+async def get_ml_status():
+    from app.services.ai_disease_engine import ai_disease_engine
+    is_cnn = getattr(ai_disease_engine, 'tf_model_loaded', False)
+    is_knn = hasattr(ai_disease_engine, 'knn_X') and ai_disease_engine.knn_X is not None
+    
+    return {
+        "cnn_model_available": is_cnn,
+        "model_name": "MobileNetV2" if is_cnn else "KNN Feature Matcher",
+        "number_of_classes": len(ai_disease_engine.classes) if ai_disease_engine.classes else 0,
+        "model_path_status": "Loaded" if is_cnn or is_knn else "Not Loaded",
+        "training_metadata": {
+            "knn_fallback_active": is_knn and not is_cnn,
+            "classes_detected": len(ai_disease_engine.class_map) if getattr(ai_disease_engine, 'class_map', None) else 0
+        }
+    }
+
 @router.post("/diagnose", response_model=DiseaseDiagnosisResult)
 async def diagnose_crop_disease(
     file: UploadFile = File(...),

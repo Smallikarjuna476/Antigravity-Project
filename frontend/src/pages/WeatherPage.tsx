@@ -184,7 +184,7 @@ export const WeatherPage: React.FC = () => {
             </div>
 
             {/* Chart Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
 
                 {/* 7-Day Temp Forecast */}
                 <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
@@ -209,40 +209,9 @@ export const WeatherPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Multi-depth Soil Moisture */}
-                <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Soil Moisture Depletion (24h)</h3>
-                    <div className="h-64">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={hourly} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#374151" opacity={0.2} />
-                                <XAxis dataKey="time" tick={{ fontSize: 12 }} interval={3} />
-                                <YAxis tick={{ fontSize: 12 }} domain={[0, 100]} />
-                                <Tooltip contentStyle={{ borderRadius: '12px' }} />
-                                <Legend iconType="circle" />
-                                <Line type="monotone" dataKey="soil_moisture_surface" name="Surface (0cm)" stroke="#f59e0b" strokeWidth={2} dot={false} />
-                                <Line type="monotone" dataKey="soil_moisture_10cm" name="Root Zone (10cm)" stroke="#10b981" strokeWidth={2} dot={false} />
-                                <Line type="monotone" dataKey="soil_moisture_30cm" name="Deep Base (30cm)" stroke="#3b82f6" strokeWidth={2} dot={false} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
 
-                {/* Hourly Precipitation */}
-                <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 lg:col-span-2">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Hourly Precipitation & Irrigation Volume (mm)</h3>
-                    <div className="h-64">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={hourly} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#374151" opacity={0.2} />
-                                <XAxis dataKey="time" tick={{ fontSize: 12 }} interval={1} />
-                                <YAxis tick={{ fontSize: 12 }} />
-                                <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '12px' }} />
-                                <Bar dataKey="precipitation_mm" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
+
+
 
             </div>
         </div>

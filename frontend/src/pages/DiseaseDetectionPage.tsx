@@ -255,7 +255,7 @@ export const DiseaseDetectionPage: React.FC = () => {
               AI Crop Disease Detection & Visual Saliency
             </h1>
             <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-              High-accuracy foliar pathology classifier powered by EfficientNetB3 and Grad-CAM attention heatmaps. Detects 38+ plant-disease pairs with instant clinical PDF reports.
+              High-accuracy foliar pathology classifier powered by deep custom-trained MobileNetV2 CNN and Grad-CAM attention heatmaps. Detects 38+ plant-disease pairs with instant clinical PDF reports.
             </p>
           </div>
 
@@ -399,13 +399,22 @@ export const DiseaseDetectionPage: React.FC = () => {
                     <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                       Crop Variety (Optional)
                     </label>
-                    <input
-                      type="text"
+                    <select
                       value={cropHint}
                       onChange={(e) => setCropHint(e.target.value)}
-                      placeholder="e.g. Tomato, Potato"
-                      className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white focus:border-emerald-500 outline-none"
-                    />
+                      className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white focus:border-emerald-500 outline-none appearance-none"
+                    >
+                      <option value="">Auto-Detect via AI</option>
+                      <option value="Tomato">Tomato</option>
+                      <option value="Potato">Potato</option>
+                      <option value="Rice">Rice / Paddy</option>
+                      <option value="Wheat">Wheat</option>
+                      <option value="Corn">Corn / Maize</option>
+                      <option value="Cotton">Cotton</option>
+                      <option value="Apple">Apple</option>
+                      <option value="Grape">Grape</option>
+                      <option value="Pepper">Bell Pepper / Chilli</option>
+                    </select>
                   </div>
 
                   <div>

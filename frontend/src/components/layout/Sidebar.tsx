@@ -41,7 +41,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         { name: 'Crop Disease AI', path: '/disease', icon: ScanEye, badge: 'Module 1', highlight: true },
         { name: 'Multilingual Assistant', path: '/assistant', icon: Bot, badge: 'Module 2' },
         { name: 'Weather Intelligence', path: '/weather', icon: CloudSun, badge: 'Module 3' },
-        { name: 'Market Intelligence', path: '/market', icon: TrendingUp, badge: 'Module 4' },
       ]
     },
     {
@@ -50,25 +49,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         { name: 'Smart Crop Planner', path: '/planner', icon: CalendarDays, badge: 'Module 5' },
         { name: 'Soil & NPK Intelligence', path: '/soil', icon: FlaskConical, badge: 'Module 6' },
         { name: 'Government Schemes', path: '/schemes', icon: Landmark, badge: 'Module 7' },
-        { name: 'Crop Health Timeline', path: '/timeline', icon: Layers, badge: 'Module 8' },
+
         { name: 'Smart Farm Journal', path: '/journal', icon: BookOpen, badge: 'Module 9' },
       ]
     },
     {
       title: 'Next-Gen Unique Tech',
       items: [
-        { name: 'AI Farm Digital Twin', path: '/digital-twin', icon: Sparkles, badge: 'Unique' },
         { name: 'AI Yield Simulator', path: '/yield-simulator', icon: SlidersHorizontal, badge: 'Unique' },
-        { name: 'Explainable AI Grad-CAM', path: '/explainable-ai', icon: Binary, badge: 'Unique' },
       ]
     },
     {
       title: 'Analytics & Community',
       items: [
-        { name: 'Analytics Dashboard', path: '/analytics', icon: BarChart3, badge: 'Module 10' },
         { name: 'Knowledge Center', path: '/knowledge', icon: FileText, badge: 'Module 11' },
         { name: 'Community Forum', path: '/forum', icon: Users, badge: 'Module 12' },
-        { name: 'Smart Report Generator', path: '/reports', icon: FileText, badge: 'Module 13' },
       ]
     }
   ];
@@ -141,7 +136,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </div>
             <div className="min-w-0">
               <p className="text-[11px] font-bold text-slate-900 dark:text-slate-200 truncate">AgriSense Engine v2.0</p>
-              <p className="text-[9px] text-emerald-600 dark:text-emerald-400 font-medium">EfficientNetB3 + Grad-CAM</p>
+              <p className="text-[9px] text-emerald-600 dark:text-emerald-400 font-medium">MobileNetV2 CNN + Grad-CAM</p>
             </div>
           </div>
         </div>

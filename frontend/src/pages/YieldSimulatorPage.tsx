@@ -12,6 +12,7 @@ import {
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Cell, AreaChart, Area
 } from 'recharts';
+import { yieldSimApi } from '../services/api';
 
 export const YieldSimulatorPage: React.FC = () => {
     // Sliders state
@@ -28,38 +29,26 @@ export const YieldSimulatorPage: React.FC = () => {
         yield: 4.5 + Math.random() * 1.5
     })));
 
-    // Simulation Engine Formula (Mock ML simulation)
+    // Simulation Engine Formula (API Integration)
     useEffect(() => {
-        // Base max yield potential
-        const baseYield = 6.5;
+        const fetchSimulation = async () => {
+            try {
+                const data = await yieldSimApi.getSimulation(nitrogen, water, temp, pestStress);
 
-        // Nitrogen curve penalty (optimal ~ 150 kg/ha)
-        const nPenalty = Math.pow(Math.abs(nitrogen - 150) / 100, 2) * 1.2;
+                const finalYield = data.projected_yield_tons_per_acre;
+                setProjectedYield(finalYield);
+                setYieldStatus(data.status);
 
-        // Water curve penalty (optimal ~ 750 mm)
-        const wPenalty = Math.pow(Math.abs(water - 750) / 200, 2) * 1.5;
-
-        // Temperature penalty (optimal ~ 26°C)
-        const tPenalty = Math.pow(Math.abs(temp - 26) / 10, 2) * 2.0;
-
-        // Pest penalty (linear reduction)
-        const pPenalty = (pestStress / 100) * 2.5;
-
-        let finalYield = baseYield - nPenalty - wPenalty - tPenalty - pPenalty;
-        finalYield = Math.max(0.0, finalYield); // Can't have negative yield
-
-        setProjectedYield(Number(finalYield.toFixed(2)));
-
-        if (finalYield >= 5.0) setYieldStatus('Optimal');
-        else if (finalYield >= 3.5) setYieldStatus('Sub-optimal');
-        else setYieldStatus('Critical');
-
-        // Update history chart dynamically
-        setHistory(prev => {
-            const newHist = [...prev.slice(1), { iteration: prev[prev.length - 1].iteration + 1, yield: Number(finalYield.toFixed(2)) }];
-            return newHist;
-        });
-
+                // Update history chart dynamically
+                setHistory(prev => {
+                    const newHist = [...prev.slice(1), { iteration: prev[prev.length - 1].iteration + 1, yield: finalYield }];
+                    return newHist;
+                });
+            } catch (err) {
+                console.error("Failed to fetch yield simulation:", err);
+            }
+        };
+        fetchSimulation();
     }, [nitrogen, water, temp, pestStress]);
 
     const resetDefaults = () => {

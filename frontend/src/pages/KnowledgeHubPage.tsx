@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     BookOpen,
     Search,
@@ -12,6 +12,7 @@ import {
     Landmark,
     Download
 } from 'lucide-react';
+import { hubApi } from '../services/api';
 
 interface Article {
     id: string;
@@ -22,6 +23,7 @@ interface Article {
     description: string;
     bookmarked: boolean;
     featured?: boolean;
+    link?: string;
 }
 
 export const KnowledgeHubPage: React.FC = () => {
@@ -29,71 +31,33 @@ export const KnowledgeHubPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'All' | 'Paper' | 'Manual' | 'Video'>('All');
     const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [libraryData, setLibraryData] = useState<Article[]>([]);
+
+    useEffect(() => {
+        const loadHub = async () => {
+            try {
+                const data = await hubApi.getArticles(activeTab, searchQuery);
+                setLibraryData(data as Article[]);
+            } catch (err) {
+                console.error("Hub Error", err);
+            }
+        };
+        loadHub();
+    }, [activeTab, searchQuery]);
 
     const handleDownload = () => {
-        setIsDownloading(true);
-        setTimeout(() => {
-            setIsDownloading(false);
-            window.print(); // Simulating physical download by triggering system print-to-pdf
-        }, 1500); // Artificial delay to simulate network fetching
+        if (selectedArticle?.link) {
+            window.open(selectedArticle.link, '_blank');
+        } else {
+            setIsDownloading(true);
+            setTimeout(() => {
+                setIsDownloading(false);
+                window.print();
+            }, 1500);
+        }
     };
 
-    const libraryData: Article[] = [
-        {
-            id: '1',
-            title: 'Integrated Pest Management (IPM) for Tomato Cultivation',
-            category: 'Manual',
-            source: 'ICAR Extension Division',
-            readTime: '12 min',
-            description: 'Comprehensive guide covering biological, cultural, and chemical controls for Early Blight, Leaf Miner, and Fruit Borer.',
-            bookmarked: true,
-            featured: true
-        },
-        {
-            id: '2',
-            title: 'Semantic Vector Search using EfficientNet in Agriculture',
-            category: 'Paper',
-            source: 'Indian Journal of Agronomy',
-            readTime: '25 min',
-            description: 'Deep learning methodology for spatial classification of necrotic lesions via Grad-CAM attribution.',
-            bookmarked: false
-        },
-        {
-            id: '3',
-            title: 'Preparation of Jeevamrutha & Beejamrutha',
-            category: 'Video',
-            source: 'National Centre for Organic Farming',
-            readTime: '15 min watch',
-            description: 'Step-by-step masterclass on fermenting microbial organic boosters using indigenous cow dung and urine.',
-            bookmarked: true,
-            featured: true
-        },
-        {
-            id: '4',
-            title: 'PM-KISAN DBT Beneficiary Guidelines 2026',
-            category: 'Policy',
-            source: 'Ministry of Agriculture',
-            readTime: '8 min',
-            description: 'Official gazette detailing e-KYC linkages required for direct benefit transfers in Kharif 2026.',
-            bookmarked: false
-        },
-        {
-            id: '5',
-            title: 'Drip Irrigation Maintenance & Acid Washing',
-            category: 'Manual',
-            source: 'State Horticulture Board',
-            readTime: '10 min',
-            description: 'Standard operating procedures for declogging emitters and maintaining uniform water distribution.',
-            bookmarked: false
-        }
-    ];
-
-    const filteredData = libraryData.filter(item => {
-        const matchesTab = activeTab === 'All' || item.category === activeTab;
-        const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.description.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesTab && matchesSearch;
-    });
+    const filteredData = libraryData;
 
     return (
         <div className="p-4 sm:p-6 lg:p-8 space-y-6 lg:space-y-8 animate-in fade-in zoom-in-95 duration-300">
@@ -137,7 +101,10 @@ export const KnowledgeHubPage: React.FC = () => {
                         <p className="text-slate-300 mb-6 text-sm sm:text-base leading-relaxed">
                             Discover how integrating continuous soil moisture tracking with AI evapotranspiration models reduces water usage by 40% while accelerating vegetative canopy growth.
                         </p>
-                        <button className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all hover:gap-3">
+                        <button 
+                            onClick={() => window.open('https://arxiv.org/pdf/1905.11946.pdf', '_blank')}
+                            className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all hover:gap-3"
+                        >
                             Read the Framework <ChevronRight className="w-4 h-4" />
                         </button>
                     </div>
@@ -252,7 +219,10 @@ export const KnowledgeHubPage: React.FC = () => {
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
                                         <span className="font-medium text-white shadow-sm">{selectedArticle.title} - Official Visual Guide</span>
                                     </div>
-                                    <button className="w-16 h-16 bg-white/20 group-hover:bg-emerald-500/90 backdrop-blur-md rounded-full flex items-center justify-center transition-all scale-95 group-hover:scale-105 z-10 shadow-lg">
+                                    <button 
+                                        onClick={() => selectedArticle.link && window.open(selectedArticle.link, '_blank')}
+                                        className="w-16 h-16 bg-white/20 group-hover:bg-emerald-500/90 backdrop-blur-md rounded-full flex items-center justify-center transition-all scale-95 group-hover:scale-105 z-10 shadow-lg"
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                                     </button>
                                 </div>

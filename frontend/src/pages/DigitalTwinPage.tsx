@@ -15,42 +15,34 @@ import 'leaflet/dist/leaflet.css';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, AreaChart, Area
 } from 'recharts';
+import { twinApi } from '../services/api';
 
 export const DigitalTwinPage: React.FC = () => {
     const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
-    const [simulationDay, setSimulationDay] = useState(42); // Vegetative stage
+    const [twinStatus, setTwinStatus] = useState<any>(null);
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date().toLocaleTimeString()), 1000);
         return () => clearInterval(timer);
     }, []);
 
-    // Simulated 4 coordinates for a farm plot roughly in India (Karnataka)
-    const farmPolygon: [number, number][] = [
-        [15.317, 75.713],
-        [15.317, 75.716],
-        [15.314, 75.715],
-        [15.315, 75.712]
-    ];
+    useEffect(() => {
+        const loadStatus = async () => {
+            try {
+                const data = await twinApi.getStatus();
+                setTwinStatus(data);
+            } catch (err) {
+                console.error("Twin Load Error", err);
+            }
+        };
+        loadStatus();
+    }, []);
 
-    const centerPoint = [15.3155, 75.714] as [number, number];
+    if (!twinStatus) {
+        return <div>Simulating Twin Environment...</div>;
+    }
 
-    const moistureData = [
-        { time: '00:00', surface: 45, rootZone: 62 },
-        { time: '04:00', surface: 42, rootZone: 60 },
-        { time: '08:00', surface: 40, rootZone: 58 },
-        { time: '12:00', surface: 32, rootZone: 55 },
-        { time: '16:00', surface: 28, rootZone: 52 },
-        { time: '20:00', surface: 30, rootZone: 51 },
-    ];
-
-    const biomassData = [
-        { day: 10, biomass: 5, expected: 6 },
-        { day: 20, biomass: 15, expected: 16 },
-        { day: 30, biomass: 32, expected: 35 },
-        { day: 40, biomass: 60, expected: 58 },
-        { day: 50, biomass: 85, expected: 82 },
-    ];
+    const { farmPolygon, centerPoint, moistureData, biomassData, metrics } = twinStatus;
 
     return (
         <div className="p-4 sm:p-6 lg:p-8 space-y-6 lg:space-y-8 animate-in fade-in zoom-in-95 duration-300">

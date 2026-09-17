@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     WEATHER_API_KEY: str = ""
     AI_API_KEY: str = ""
     
-    DEMO_MODE: bool = False
+    DEMO_MODE: bool = True
     
     # Static & Storage Paths
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     REPORTS_DIR: str = os.path.join(STATIC_DIR, "reports")
     SAMPLES_DIR: str = os.path.join(STATIC_DIR, "samples")
     
-    CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
+    CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176"
     
     @property
     def cors_origins_list(self) -> list[str]:

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     BarChart3,
     TrendingUp,
@@ -12,72 +12,34 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer,
     BarChart, Bar, AreaChart, Area, ComposedChart
 } from 'recharts';
+import { analyticsApi } from '../services/api';
 
 export const AnalyticsPage: React.FC = () => {
     const [timeframe, setTimeframe] = useState<'month' | 'season' | 'year'>('season');
 
-    // Simulated Dynamic Data for Analytics
-    const allYieldData = {
-        month: [
-            { name: 'Week 1', Expected: 120, Actual: 110 },
-            { name: 'Week 2', Expected: 125, Actual: 115 },
-            { name: 'Week 3', Expected: 130, Actual: 105 },
-            { name: 'Week 4', Expected: 140, Actual: 135 },
-        ],
-        season: [
-            { name: 'Kharif 21', Expected: 120, Actual: 110 },
-            { name: 'Rabi 21-22', Expected: 140, Actual: 145 },
-            { name: 'Kharif 22', Expected: 130, Actual: 105 },
-            { name: 'Rabi 22-23', Expected: 150, Actual: 155 },
-            { name: 'Kharif 23', Expected: 135, Actual: 140 },
-            { name: 'Rabi 23-24', Expected: 160, Actual: 165 },
-        ],
-        year: [
-            { name: '2019', Expected: 250, Actual: 240 },
-            { name: '2020', Expected: 260, Actual: 255 },
-            { name: '2021', Expected: 270, Actual: 245 },
-            { name: '2022', Expected: 280, Actual: 290 },
-            { name: '2023', Expected: 295, Actual: 285 },
-        ]
-    };
+    const [currentYieldData, setCurrentYieldData] = useState<any[]>([]);
+    const [currentDiseaseData, setCurrentDiseaseData] = useState<any[]>([]);
+    const [aiAccuracyData, setAiAccuracyData] = useState<any[]>([]);
+    const [kpis, setKpis] = useState<any>(null);
 
-    const allDiseaseIncidence = {
-        month: [
-            { name: 'Early Blight', cases: 12, severity: 8 },
-            { name: 'Leaf Curl', cases: 5, severity: 3 },
-            { name: 'Rust', cases: 8, severity: 4 },
-            { name: 'Aphids', cases: 20, severity: 5 },
-        ],
-        season: [
-            { name: 'Early Blight', cases: 45, severity: 8 },
-            { name: 'Leaf Curl', cases: 30, severity: 5 },
-            { name: 'Rust', cases: 80, severity: 3 },
-            { name: 'Powdery Mildew', cases: 55, severity: 6 },
-            { name: 'Aphids', cases: 110, severity: 4 },
-        ],
-        year: [
-            { name: 'Early Blight', cases: 145, severity: 9 },
-            { name: 'Leaf Curl', cases: 90, severity: 5 },
-            { name: 'Rust', cases: 280, severity: 4 },
-            { name: 'Mildew', cases: 155, severity: 6 },
-            { name: 'Aphids', cases: 410, severity: 7 },
-        ]
-    };
-
-    const aiAccuracyData = [
-        { name: 'T-4', Confidence: 88, Validated: 85 },
-        { name: 'T-3', Confidence: 91, Validated: 89 },
-        { name: 'T-2', Confidence: 94, Validated: 92 },
-        { name: 'T-1', Confidence: 96, Validated: 95 },
-        { name: 'Current', Confidence: 98, Validated: 97 },
-    ];
+    useEffect(() => {
+        const loadMetrics = async () => {
+            try {
+                const data = await analyticsApi.getMetrics(timeframe);
+                setCurrentYieldData(data.yield_data);
+                setCurrentDiseaseData(data.disease_incidence);
+                setAiAccuracyData(data.ai_accuracy);
+                if (data.kpis) setKpis(data.kpis);
+            } catch (err) {
+                console.error("Failed to load analytics metrics", err);
+            }
+        };
+        loadMetrics();
+    }, [timeframe]);
 
     const handleExportPDF = () => {
         window.print(); // Triggers the browser's native PDF export dialog
     };
-
-    const currentYieldData = allYieldData[timeframe];
-    const currentDiseaseData = allDiseaseIncidence[timeframe];
 
     return (
         <div className="p-4 sm:p-6 lg:p-8 space-y-6 lg:space-y-8 animate-in fade-in zoom-in-95 duration-300">
@@ -136,9 +98,9 @@ export const AnalyticsPage: React.FC = () => {
                         </div>
                         <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Gross Revenue</h3>
                     </div>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-white">₹3.4L</p>
+                    <p className="text-3xl font-bold text-slate-900 dark:text-white">{kpis?.gross_revenue || '₹0'}</p>
                     <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-2 flex items-center gap-1">
-                        +14.2% <span className="text-slate-400 dark:text-slate-500 font-normal">vs last season</span>
+                        {kpis?.revenue_growth || '+0%'}
                     </p>
                 </div>
 
@@ -152,9 +114,9 @@ export const AnalyticsPage: React.FC = () => {
                         </div>
                         <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">AI Precision Index</h3>
                     </div>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-white">97.4%</p>
+                    <p className="text-3xl font-bold text-slate-900 dark:text-white">{kpis?.ai_precision || '0%'}</p>
                     <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium mt-2 flex items-center gap-1">
-                        +2.1% <span className="text-slate-400 dark:text-slate-500 font-normal">model confidence</span>
+                        {kpis?.precision_growth || '+0% model confidence'}
                     </p>
                 </div>
 
@@ -168,9 +130,9 @@ export const AnalyticsPage: React.FC = () => {
                         </div>
                         <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Pest Interventions</h3>
                     </div>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-white">12</p>
+                    <p className="text-3xl font-bold text-slate-900 dark:text-white">{kpis?.pest_interventions || '0'}</p>
                     <p className="text-xs text-rose-600 dark:text-rose-400 font-medium mt-2 flex items-center gap-1">
-                        -4 <span className="text-slate-400 dark:text-slate-500 font-normal">chemical sprays reduced</span>
+                        {kpis?.pest_reduction || '-0 chemical sprays reduced'}
                     </p>
                 </div>
 
@@ -184,9 +146,9 @@ export const AnalyticsPage: React.FC = () => {
                         </div>
                         <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Fertilizer Efficiency</h3>
                     </div>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-white">A+</p>
+                    <p className="text-3xl font-bold text-slate-900 dark:text-white">{kpis?.fertilizer_efficiency || '-'}</p>
                     <p className="text-xs text-amber-600 dark:text-amber-400 font-medium mt-2 flex items-center gap-1">
-                        Optimal <span className="text-slate-400 dark:text-slate-500 font-normal">NPK utilization tier</span>
+                        {kpis?.fertilizer_tier || 'N/A'} <span className="text-slate-400 dark:text-slate-500 font-normal">NPK utilization tier</span>
                     </p>
                 </div>
             </div>
@@ -260,33 +222,6 @@ export const AnalyticsPage: React.FC = () => {
                         </ResponsiveContainer>
                     </div>
                 </div>
-
-                {/* AI Model Validation Trajectory */}
-                <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm lg:col-span-2">
-                    <div className="flex items-center justify-between mb-6">
-                        <div>
-                            <h3 className="font-bold text-slate-900 dark:text-white">AI Diagnostic Reliability Core</h3>
-                            <p className="text-xs text-slate-500 dark:text-slate-400">System confidence vs Expert validated diagnoses over recent weeks</p>
-                        </div>
-                    </div>
-                    <div className="h-[250px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={aiAccuracyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.2} />
-                                <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="#64748b" />
-                                <YAxis domain={[80, 100]} tick={{ fontSize: 11 }} stroke="#64748b" />
-                                <RechartsTooltip
-                                    contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#f1f5f9' }}
-                                    formatter={(value: any) => [`${value}%`, '']}
-                                />
-                                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                                <Line type="monotone" dataKey="Confidence" stroke="#6366f1" strokeWidth={2} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-                                <Line type="monotone" dataKey="Validated" stroke="#10b981" strokeWidth={2} strokeDasharray="4 4" dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
-
             </div>
         </div>
     );

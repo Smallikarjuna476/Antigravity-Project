@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Binary,
     Cpu,
@@ -12,55 +12,32 @@ import {
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Cell, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
+import { xaiApi } from '../services/api';
 
 export const ExplainableAIPage: React.FC = () => {
     const [selectedSample, setSelectedSample] = useState(0);
+    const [samples, setSamples] = useState<any[]>([]);
+    const [featureImportance, setFeatureImportance] = useState<any[]>([]);
+    const [radarData, setRadarData] = useState<any[]>([]);
 
-    const samples = [
-        {
-            name: "Tomato Early Blight",
-            confidence: 98.4,
-            baseImage: "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&q=80&w=800",
-            heatmapStyle: "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rose-500/60 via-amber-500/20 to-transparent",
-            heatmapPosition: "top-[20%] left-[30%] w-[40%] h-[50%]",
-            reasoning: "The convolutional neural network strongly activates around concentric necrotic rings with chlorotic halos, characteristic of Alternaria solani."
-        },
-        {
-            name: "Healthy Maize Leaf",
-            confidence: 99.1,
-            baseImage: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=800",
-            heatmapStyle: "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-500/30 via-emerald-400/10 to-transparent",
-            heatmapPosition: "top-[10%] left-[10%] w-[80%] h-[80%]",
-            reasoning: "Uniform distributed activation across the leaf blade. No distinct focal lesions detected. High confidence in photosynthetic integrity."
-        },
-        {
-            name: "Potato Late Blight",
-            confidence: 94.7,
-            baseImage: "https://images.unsplash.com/photo-1587824151216-56bebc14fb1e?auto=format&fit=crop&q=80&w=800",
-            heatmapStyle: "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-500/60 via-purple-500/20 to-transparent",
-            heatmapPosition: "top-[40%] left-[50%] w-[35%] h-[45%]",
-            reasoning: "Saliency map highlights irregular water-soaked edge lesions indicating Phytophthora infestans sporangiophores."
-        }
-    ];
+    useEffect(() => {
+        const loadXAI = async () => {
+            try {
+                const s = await xaiApi.getSamples();
+                const f = await xaiApi.getFeatures();
+                setSamples(s);
+                setFeatureImportance(f.features);
+                setRadarData(f.radar);
+            } catch (err) {
+                console.error("XAI Load Error", err);
+            }
+        };
+        loadXAI();
+    }, []);
 
-    const currentSample = samples[selectedSample];
+    const currentSample = samples.length > 0 ? samples[selectedSample] : null;
 
-    const featureImportance = [
-        { name: 'Necrotic Rings', impact: 85 },
-        { name: 'Chlorotic Halo', impact: 72 },
-        { name: 'Leaf Venation', impact: 15 },
-        { name: 'Stem Color', impact: 8 },
-        { name: 'Background', impact: 2 },
-    ];
-
-    const radarData = [
-        { subject: 'Texture Analysis', A: 95, fullMark: 100 },
-        { subject: 'Color Degradation', A: 88, fullMark: 100 },
-        { subject: 'Shape Recognition', A: 92, fullMark: 100 },
-        { subject: 'Spatial Geometry', A: 75, fullMark: 100 },
-        { subject: 'Edge Detection', A: 89, fullMark: 100 },
-        { subject: 'Background Sep', A: 99, fullMark: 100 },
-    ];
+    if (samples.length === 0) return <div>Loading AI Tensors...</div>;
 
     return (
         <div className="p-4 sm:p-6 lg:p-8 space-y-6 lg:space-y-8 animate-in fade-in zoom-in-95 duration-300">

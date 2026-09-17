@@ -4,7 +4,7 @@ echo Start Smart Agri Ecosystem (AgriSense AI)
 echo ========================================================
 
 echo [1/2] Starting FastAPI Backend...
-start cmd /k "cd backend && call venv\Scripts\activate && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+start cmd /k "cd backend && call venv\Scripts\activate && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
 echo [2/2] Starting React Frontend...
 start cmd /k "cd frontend && npm run dev"

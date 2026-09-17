@@ -1,71 +1,60 @@
-# Smart Agri Ecosystem – AI Powered Crop Advisory & Market Intelligence Platform
+# 🌱 AgriSense AI - Intelligent Agriculture Decision Support Platform
 
-## Overview
-**AgriSense AI** (Smart Agri Ecosystem) is a comprehensive, production-ready full-stack AI platform tailored for the agricultural sector. It assists farmers with AI-driven, data-backed decision-making to optimize crop health, maximize yield, and improve economic outcomes. This platform aligns directly with SDG Goal 2 (Zero Hunger) by enabling precision agronomy for smallholder and commercial farmers alike.
+![AgriSense AI Banner](https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&q=80&w=1200)
 
-## Key Modules
-1. **Crop Disease Detection & Pathology** (Module 1): Computes affected lesion areas, severity, and provides AI-driven prescriptive treatments backed by efficient Convolutional Neural Networks and Grad-CAM interpretability.
-2. **Precision Crop Planner** (Module 2): Algorithmic chronological scheduling mapped against local phenology and geospatial soil factors.
-3. **Autonomous Agronomy Assistant** (Module 3): Real-time chat interface powered by deep natural language capabilities, allowing farmers to query issues conversationally.
-4. **Economic Yield & Market Simulator** (Module 4): Price predictions and volume metrics leveraging regression over environmental heuristics.
-5. **Weather & Environment Insights**: Direct integration with meteorological parameters for proactive planning.
-6. **Government Schemes Integration**: A persistent, up-to-date registry mapping farmers to applicable KCC and agricultural subsidies.
-7. **Farm Journal & Soil Intelligence**: Personal telemetry tracking allowing farmers to historically verify and audit crop progress, NPK variance, and pH integrity over time.
+## 📌 Overview
+**AgriSense AI** is an enterprise-grade, comprehensive agricultural decision support system leveraging Artificial Intelligence, geospatial analytics, and comprehensive temporal datasets to optimize farming protocols. 
 
-## Architecture & Tech Stack
+Our architecture bridges the gap between sophisticated ML pipelines (Explainable AI diagnostics, predictive yield modeling, geospatial twin mapping) and a modernized, ultra-responsive frontend operational dashboard—serving as a cohesive **Operating System for Smart Agriculture.**
 
-### Frontend (Client-side)
-- **Framework**: React.js 18
-- **Tooling**: Vite for High-Speed Module Replacement
-- **Typing**: TypeScript
-- **Styling**: Tailwind CSS & Lucide Icons (Dark/Light Theming natively supported)
+---
 
-### Backend (Server-side)
-- **Framework**: FastAPI (Python 3.11)
-- **Database**: SQLite with SQLAlchemy ORM (ACID Compliant)
-- **Security**: JWT (JSON Web Tokens) with Argon2/Bcrypt hash salting for authentication boundaries.
-- **Reporting**: ReportLab for generation of dynamic, exportable agronomic PDF certificates.
+## 🚀 Key Features
 
-### Deployment & DevOps
-- **Docker**: Dual-image configurations orchestrated via Docker Compose.
-- **Dependencies**: Streamlined via `requirements.txt` and `package.json` for reproducible builds.
+*   **🦠 Diagnostic XAI Engine:** Deep-learning inference endpoints for hyperspectral crop disease detection using Grad-CAM heat-mappings (Module 1/3).
+*   **🤖 AI Agronomist Chatbot:** Secure RAG-based context-aware agricultural assistant (Module 2).
+*   **🌦 Microclimate Intelligence:** Real-time weather API integration modeling hyper-local parameters (Module 4).
+*   **📊 Market Arbitrage Matrix:** Advanced commodity intelligence tracking APMC mandi prices and algorithmic yield projections (Module 5/11).
+*   **🌍 Smart Crop Planner:** Geospatial integration detecting viable crop alignments relative to soil biome and monsoon timelines (Module 6).
+*   **🏛 Scheme Gateway:** Automated filtration connecting rural operations with state/federal subsidies like PM-KISAN (Module 8).
+*   **🗺 Spatial Digital Twin**: Real-time mock ingestion of moisture and biomass variables rendered on an interactive map (Module 12).
+*   **📖 Community & Knowledge Hub:** Integrated peer-to-peer forum architectures with downloadable expert agricultural literature endpoints (Module 13/14).
 
-## Setup & Execution
+---
 
-### Option 1: Docker 🐳 (Recommended)
-You can deploy the entire stack using Docker:
+## 🛠 Technology Stack
+
+### **Backend (Data & AI Layer)**
+- **Framework:** FastAPI (Python 3.11)
+- **Database:** SQLite3 / SQLAlchemy ORM
+- **Testing:** Pytest & TestClient
+- **Auth:** JWT Bearer (Token-based Stateless Security)
+
+### **Frontend (Presentation Layer)**
+- **Framework:** React + TypeScript (Vite)
+- **Styling:** TailwindCSS + Lucide Icons
+- **Data Visualization:** Recharts
+- **Mapping:** React-Leaflet
+
+### **Infrastructure (DevOps & Deployment)**
+- **Containerization:** Docker Compose
+- **CI/CD:** GitHub Actions YAML Pipelines
+
+---
+
+## ⚙️ Quick Start (Local Deployment)
+
+Run our automated batch execution engine on Windows:
 ```bash
-# In the root directory (where docker-compose.yml is located)
-docker-compose up --build
+# Execute within the root directory
+run_project.bat
 ```
-- The backend will run on `http://localhost:8000`
-- The frontend will be available at `http://localhost:3000`
+*This command natively executes both the Uvicorn FastAPI backend server (Port: 8000) and the Vite Frontend local server (Port: 5173).*
 
-### Option 2: Local Native Execution
-**1. Backend Setup**
+Alternatively, via Docker:
 ```bash
-cd backend
-python -m venv venv
-# Windows:
-.\venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
-
-pip install -r requirements.txt
-python seed_data.py # Seed the database
-uvicorn app.main:app --reload
-```
-
-**2. Frontend Setup**
-```bash
-cd frontend
-npm install
-npm run dev
+docker-compose up --build -d
 ```
 
-## Documentation
-- The comprehensive IEEE-Style Architecture Report can be found in `documentation/IEEE_Project_Report.md`.
-- Backend endpoints feature strict doc-strings adhering to algorithm complexity evaluations inline with IEEE standard expectations.
-
-## License
-MIT License.
+## 🔒 License
+This repository is marked proprietary strictly for academic review and implementation regarding the Major Project submission guidelines.
