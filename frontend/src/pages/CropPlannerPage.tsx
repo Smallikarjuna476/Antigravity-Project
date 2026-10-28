@@ -266,7 +266,7 @@ export const CropPlannerPage: React.FC = () => {
                                             ))}
                                         </div>
                                         <p className="text-xs text-indigo-200 mt-4 text-center">
-                                            *Subject to dynamic soil testing results in Module 6.
+                                            *Baseline estimate. Adjust per actual soil testing results.
                                         </p>
                                     </div>
                                 </div>

@@ -7,7 +7,6 @@ import {
   CloudSun,
   TrendingUp,
   CalendarDays,
-  FlaskConical,
   Landmark,
   History,
   BookOpen,
@@ -47,7 +46,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       title: 'Agronomy & Planning',
       items: [
         { name: 'Smart Crop Planner', path: '/planner', icon: CalendarDays, badge: 'Module 5' },
-        { name: 'Soil & NPK Intelligence', path: '/soil', icon: FlaskConical, badge: 'Module 6' },
         { name: 'Government Schemes', path: '/schemes', icon: Landmark, badge: 'Module 7' },
 
         { name: 'Smart Farm Journal', path: '/journal', icon: BookOpen, badge: 'Module 9' },

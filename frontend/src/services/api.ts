@@ -187,22 +187,6 @@ export const plannerApi = {
   }
 };
 
-// --- Module 6: Soil & NPK Intelligence ---
-export const soilApi = {
-  scanReport: async (file: File): Promise<any> => {
-    const formData = new FormData();
-    formData.append('file', file);
-    const res = await api.post('/soil/scan', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
-    return res.data;
-  },
-  getHistory: async (): Promise<any> => {
-    const res = await api.get('/soil/history');
-    return res.data;
-  }
-};
-
 // --- Module 7: Government Schemes ---
 export const schemesApi = {
   getSchemes: async (state: string): Promise<any> => {

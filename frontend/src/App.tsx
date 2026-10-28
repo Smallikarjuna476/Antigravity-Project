@@ -13,7 +13,6 @@ import { DiseaseDetectionPage } from './pages/DiseaseDetectionPage';
 import { AssistantPage } from './pages/AssistantPage';
 import { WeatherPage } from './pages/WeatherPage';
 import { CropPlannerPage } from './pages/CropPlannerPage';
-import { SoilIntelligencePage } from './pages/SoilIntelligencePage';
 import { SchemesPage } from './pages/SchemesPage';
 
 import { FarmJournalPage } from './pages/FarmJournalPage';
@@ -44,7 +43,6 @@ export const App: React.FC = () => {
               <Route path="/assistant" element={<AssistantPage />} />
               <Route path="/weather" element={<WeatherPage />} />
               <Route path="/planner" element={<CropPlannerPage />} />
-              <Route path="/soil" element={<SoilIntelligencePage />} />
               <Route path="/schemes" element={<SchemesPage />} />
 
               <Route path="/journal" element={<FarmJournalPage />} />

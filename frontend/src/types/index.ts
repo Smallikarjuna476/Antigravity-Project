@@ -292,37 +292,6 @@ export interface BenchmarkResponse {
   };
 }
 
-// Module 6: Soil & NPK Intelligence
-export interface SoilMetrics {
-  pH: number;
-  EC_ds_m: number;
-  OC_percentage: number;
-  Nitrogen_kg_ha: number;
-  Phosphorus_kg_ha: number;
-  Potassium_kg_ha: number;
-}
-
-export interface SoilScanResponse {
-  scan_id: string;
-  filename: string;
-  date_scanned: string;
-  metrics: SoilMetrics;
-  health_status: 'Optimal' | 'Requires Amendment' | 'Nutrient Deficient';
-  recommendations: string[];
-}
-
-export interface SoilHistoryRecord {
-  year: number;
-  Nitrogen: number;
-  Phosphorus: number;
-  Potassium: number;
-  pH: number;
-  OrganicCarbon: number;
-}
-
-export interface SoilHistoryResponse {
-  history: SoilHistoryRecord[];
-}
 
 // Module 7: Government Schemes
 export interface GovernmentScheme {

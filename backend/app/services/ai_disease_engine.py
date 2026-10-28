@@ -14,6 +14,7 @@ try:
     import tensorflow as tf
     from tensorflow.keras.models import load_model
     from tensorflow.keras.preprocessing.image import img_to_array
+    from tensorflow.keras.applications.mobilenet_v2 import preprocess_input as mobilenet_preprocess
     import tensorflow.keras.backend as K
     TF_AVAILABLE = True
     logging.info("TensorFlow available. Real ML engine active.")
@@ -425,20 +426,25 @@ class AIDiseaseEngine:
             try:
                 img_resized = cv2.resize(img_bgr, (224, 224))
                 img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
-                img_array = img_to_array(img_rgb) / 255.0
+                # CRITICAL FIX: Use MobileNetV2 preprocess_input (scales to [-1, 1])
+                # This MUST match exactly how the model was trained in train_mobilenet.py
+                img_array = img_to_array(img_rgb)
+                img_array = mobilenet_preprocess(img_array)
                 img_array = np.expand_dims(img_array, axis=0)
                 
-                preds = self.tf_model.predict(img_array)[0]
-                pred_idx = np.argmax(preds)
+                preds = self.tf_model.predict(img_array, verbose=0)[0]
+                pred_idx = int(np.argmax(preds))
                 confidence = float(preds[pred_idx])
                 
-                for class_name, idx_val in self.class_map.items():
-                    if idx_val == pred_idx:
-                        pred_key = class_name
-                        break
+                # class_map is {str(index): class_name} from class_names.json
+                pred_key = self.class_map.get(str(pred_idx), None)
+                if pred_key is None:
+                    # fallback: search by int key
+                    pred_key = self.class_map.get(pred_idx, None)
                         
                 is_ml_used = True
                 prediction_type = "MobileNetV2 CNN"
+                logging.info(f"CNN predicted: index={pred_idx}, class={pred_key}, confidence={confidence:.3f}")
             except Exception as e:
                 logging.error(f"TF CNN Prediction Failed: {e}")
 
@@ -462,18 +468,33 @@ class AIDiseaseEngine:
                 logging.error(f"KNN Prediction Failed: {e}")
                 
         if is_ml_used:
-            # Fuzzy match to account for dataset folder naming variations
+            # Build a robust label-to-knowledgebase bridge.
+            # The CNN outputs class names from class_names.json (e.g. "Tomato_Early_blight")
+            # The knowledge base uses triple-underscore keys (e.g. "Tomato___Early_blight")
+            # Strip ALL underscores, dashes, spaces for a clean comparison.
             norm_pk = (pred_key or "").lower().replace("_", "").replace("-", "").replace(" ", "")
             matched = False
+
+            # Pass 1: Exact normalized match
             for kb_key in self.knowledge_base:
-                if kb_key.lower().replace("_", "").replace("-", "").replace(" ", "") == norm_pk:
+                norm_kb = kb_key.lower().replace("_", "").replace("-", "").replace(" ", "")
+                if norm_kb == norm_pk:
                     pred_key = kb_key
                     matched = True
                     break
-                    
 
+            # Pass 2: Partial/substring match (handles cases like "tomatoearlyblight" vs "tomatoearlyblight")
+            if not matched:
+                for kb_key in self.knowledge_base:
+                    norm_kb = kb_key.lower().replace("_", "").replace("-", "").replace(" ", "")
+                    if norm_pk in norm_kb or norm_kb in norm_pk:
+                        pred_key = kb_key
+                        matched = True
+                        break
 
             if not matched:
+                # Log the unmatched key to help debug
+                logging.warning(f"CNN predicted class '{pred_key}' could not be matched to knowledge base. Using fallback.")
                 pred_key = "Tomato___Early_blight"
             if affected_area_pct > 25.0:
                 severity = "Severe"

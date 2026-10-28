@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.core.config import settings
 from app.core.database import Base, engine
-from app.api.v1 import auth, disease, assistant, weather, planner, soil, schemes, journal, yield_sim, forum, analytics, xai, twin, hub
+from app.api.v1 import auth, disease, assistant, weather, planner, schemes, journal, yield_sim, forum, analytics, xai, twin, hub
 from seed_data import seed_database
 
 # Initialize DB tables
@@ -53,7 +53,6 @@ app.include_router(disease.router, prefix=settings.API_V1_STR)
 app.include_router(assistant.router, prefix=settings.API_V1_STR)
 app.include_router(weather.router, prefix=settings.API_V1_STR)
 app.include_router(planner.router, prefix=settings.API_V1_STR)
-app.include_router(soil.router, prefix=settings.API_V1_STR)
 app.include_router(schemes.router, prefix=settings.API_V1_STR)
 
 app.include_router(journal.router, prefix=settings.API_V1_STR)
@@ -78,7 +77,6 @@ def root():
             "Module 3: Smart Weather Intelligence",
             "Module 4: Market Intelligence & Price Prediction",
             "Module 5: Smart Crop Planner",
-            "Module 6: Soil Intelligence & NPK Balancer",
             "Module 7: Government Schemes Recommender",
 
             "Module 9: Smart Farm Journal",
